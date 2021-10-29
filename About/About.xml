@@ -1,0 +1,9 @@
+<ModMetaData>
+	<name>Madder Skills</name>
+	<author>Imranfish</author>
+    <packageId>imranfish.madderskills</packageId>
+	<supportedVersions>
+		<li>1.3</li>
+	</supportedVersions>
+	<description>Meant to be an add-on to Mad Skills, this mod allows you to configure xp multipliers for passions and skills individually. (Can be run as a standalone as well)</description>
+</ModMetaData>
