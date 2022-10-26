@@ -1,27 +1,30 @@
 ﻿using HarmonyLib;
 using RimWorld;
+using System;
 using System.Text.RegularExpressions;
 using XmlExtensions;
 
 namespace MadderSkills
 {
 	[HarmonyPatch(typeof(SkillUI))]
-	[HarmonyPatch("GetSkillDescription")]
-	static class Patch_LearningSaturationUI
+	[HarmonyPatch("GetLearningFactor")]
+	static class Patch_GetLearningFactor
 	{
-		private static void Postfix(ref string __result, SkillRecord sk)
+		public static void Postfix(Passion passion, ref float __result)
 		{
-			switch (sk.passion)
+			switch (passion)
 			{
 				case Passion.None:
-					__result = Regex.Replace(__result, "[^:] 35%", new MatchEvaluator(delegate (Match m) { return m.Value[0] + " " + SettingsManager.GetSetting("imranfish.madderskills", "multiplierNoPassion") + "%"; }));
+					__result = float.Parse(SettingsManager.GetSetting("imranfish.madderskills", "multiplierNoPassion")) / 100f;
 					break;
 				case Passion.Minor:
-					__result = Regex.Replace(__result, "[^:] 100%", new MatchEvaluator(delegate (Match m) { return m.Value[0] + " " + SettingsManager.GetSetting("imranfish.madderskills", "multiplierMinorPassion") + "%"; }));
+					__result = float.Parse(SettingsManager.GetSetting("imranfish.madderskills", "multiplierMinorPassion")) / 100f;
 					break;
 				case Passion.Major:
-					__result = Regex.Replace(__result, "[^:] 150%", new MatchEvaluator(delegate (Match m) { return m.Value[0] + " " + SettingsManager.GetSetting("imranfish.madderskills", "multiplierMajorPassion") + "%"; }));
+					__result = float.Parse(SettingsManager.GetSetting("imranfish.madderskills", "multiplierMajorPassion")) / 100f;
 					break;
+				default:
+					throw new NotImplementedException("Passion level " + passion);
 			}
 		}
 	}
